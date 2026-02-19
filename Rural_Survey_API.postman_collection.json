@@ -1,0 +1,389 @@
+{
+	"info": {
+		"_postman_id": "rural-survey-api",
+		"name": "Rural Survey Backend API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "rural-survey-exporter"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login - Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/login",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Surveyor 1",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"surveyor1\",\n  \"password\": \"survey123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/login",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Routes",
+			"item": [
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/me",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							{
+								"type": "text/javascript",
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('token', response.token);",
+									"    console.log('Token saved:', response.token);",
+									"}"
+								]
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Survey Routes",
+			"item": [
+				{
+					"name": "Get All Surveys",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/surveys",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"surveys"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Survey",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"village_id\": \"69961c8530620d6534a26618\",\n  \"phase1\": {\n    \"household_number\": \"HH001\",\n    \"respondent_name\": \"John Doe\",\n    \"respondent_age\": 35,\n    \"respondent_gender\": \"male\",\n    \"respondent_education\": \"graduate\",\n    \"respondent_occupation\": \"agriculture\"\n  },\n  \"phase2\": {\n    \"family_members\": [\n      {\n        \"name\": \"Jane Doe\",\n        \"age\": 30,\n        \"gender\": \"female\",\n        \"relationship\": \"spouse\",\n        \"education\": \"graduate\",\n        \"occupation\": \"teaching\"\n      }\n    ]\n  },\n  \"phase3\": {\n    \"children\": [\n      {\n        \"name\": \"Child 1\",\n        \"age\": 8,\n        \"gender\": \"male\",\n        \"education\": \"primary\",\n        \"school_attending\": true,\n        \"school_type\": \"government\"\n      }\n    ]\n  },\n  \"phase4\": {\n    \"employment\": {\n      \"primary_occupation\": \"agriculture\",\n      \"secondary_occupation\": \"labor\",\n      \"monthly_income\": 15000,\n      \"income_source\": \"farming\"\n    },\n    \"unemployed_members\": [\n      {\n        \"name\": \"Member 1\",\n        \"age\": 22,\n        \"gender\": \"male\",\n        \"education\": \"graduate\",\n        \"unemployment_duration\": 6,\n        \"job_searching\": true,\n        \"skills\": [\"agriculture\", \"driving\"]\n      }\n    ]\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/surveys",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"surveys"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Survey by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/surveys/{{survey_id}}",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"surveys",
+								"{{survey_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Village Routes",
+			"item": [
+				{
+					"name": "Get All Villages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/villages",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"villages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Routes",
+			"item": [
+				{
+					"name": "Dashboard Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/admin/dashboard/stats",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"admin",
+								"dashboard",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Survey Analytics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/admin/analytics",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"admin",
+								"analytics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Surveys (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/admin/surveys",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"admin",
+								"surveys"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export Surveys (CSV)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/api/admin/surveys/export?format=csv",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"admin",
+								"surveys",
+								"export"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "survey_id",
+			"value": "6996bd2430620d86bcd34ec4",
+			"type": "string"
+		}
+	]
+}

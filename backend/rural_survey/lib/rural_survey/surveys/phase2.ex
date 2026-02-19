@@ -3,6 +3,7 @@ defmodule RuralSurvey.Surveys.Phase2 do
   Phase 2: Healthcare Section
   """
 
+  @derive Jason.Encoder
   alias RuralSurvey.Surveys.Phase2.AffectedMember
 
   @type t :: %__MODULE__{
@@ -91,6 +92,8 @@ defmodule RuralSurvey.Surveys.Phase2.AffectedMember do
   @moduledoc """
   Affected member in Phase 2 (Healthcare)
   """
+
+  @derive Jason.Encoder
 
   @type t :: %__MODULE__{
           patientName: String.t(),

@@ -26,15 +26,13 @@ defmodule RuralSurvey.Surveys.Village do
   Gets all villages from the database
   """
   def get_all_villages do
-    case Mongo.find(:mongo, "villages", %{}) do
-      {:ok, cursor} ->
-        cursor
-        |> Enum.to_list()
-        |> Enum.map(&from_map/1)
-
-      {:error, _} ->
-        []
-    end
+    cursor = Mongo.find(:mongo, "villages", %{})
+    villages = cursor
+      |> Enum.to_list()
+      |> Enum.map(&from_map/1)
+    villages
+  rescue
+    _ -> []
   end
 
   @doc """

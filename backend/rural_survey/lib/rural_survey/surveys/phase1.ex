@@ -1,7 +1,10 @@
 defmodule RuralSurvey.Surveys.Phase1 do
   @moduledoc """
-  Phase 1: Household Basic Information
+  Phase1 struct and functions for household basic information.
   """
+
+  @derive Jason.Encoder
+  alias RuralSurvey.Mongo
 
   @type t :: %__MODULE__{
           representativeFullName: String.t(),

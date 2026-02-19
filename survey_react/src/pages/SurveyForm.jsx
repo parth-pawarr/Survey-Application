@@ -29,13 +29,63 @@ export default function SurveyForm() {
     fetchVillages();
   }, []);
 
+  // const fetchVillages = async () => {
+  //   try {
+  //     const response = await villageAPI.getVillages();
+  //     setVillages(response.data.villages || []);
+  //   } catch (err) {
+  //     console.error('Error fetching villages:', err);
+  //   }
+  // };
+
   const fetchVillages = async () => {
-    try {
-      const response = await villageAPI.getVillages();
-      setVillages(response.data.villages || []);
-    } catch (err) {
-      console.error('Error fetching villages:', err);
+  try {
+    const response = await villageAPI.getVillages();
+    setVillages(response.data.villages || []);
+  } catch (err) {
+    console.error('Error fetching villages:', err);
+    // If needed, hardcode with proper _id fields, not plain strings
+    setVillages([
+      { _id: "actual_mongo_id_1", name: "Nashik" },
+      { _id: "actual_mongo_id_2", name: "Ozar" },
+    ]);
+  }
+};
+
+
+
+  const validateFormData = (formData) => {
+    const errors = [];
+
+    // Validate Phase 1
+    if (!formData.phase1.representativeFullName?.trim()) {
+      errors.push('Representative full name is required');
     }
+    if (!formData.phase1.mobileNumber?.trim()) {
+      errors.push('Mobile number is required');
+    } else if (!/^\d{10}$/.test(formData.phase1.mobileNumber)) {
+      errors.push('Mobile number must be 10 digits');
+    }
+    if (!formData.phase1.age) {
+      errors.push('Age is required');
+    }
+    if (!formData.phase1.gender) {
+      errors.push('Gender is required');
+    }
+    if (!formData.phase1.totalFamilyMembers) {
+      errors.push('Total family members is required');
+    }
+    if (!formData.phase1.ayushmanCardStatus) {
+      errors.push('Ayushman card status is required');
+    }
+    if (
+      formData.phase1.ayushmanCardStatus === 'Some Members Have' &&
+      !formData.phase1.ayushmanCardCount
+    ) {
+      errors.push('Please specify how many members have the Ayushman card');
+    }
+
+    return errors;
   };
 
   const handleSubmit = async (e) => {
@@ -51,9 +101,29 @@ export default function SurveyForm() {
       }
 
       const formData = getFormData();
+
+      // Client-side validation
+      const validationErrors = validateFormData(formData);
+      if (validationErrors.length > 0) {
+        setError(validationErrors.join('\n'));
+        setLoading(false);
+        return;
+      }
+
       const surveyData = {
-        ...formData,
-        village,
+        village_id: village,
+        phase1: {
+          representativeFullName: formData.phase1.representativeFullName,
+          mobileNumber: formData.phase1.mobileNumber,
+          age: parseInt(formData.phase1.age),
+          gender: formData.phase1.gender,
+          totalFamilyMembers: parseInt(formData.phase1.totalFamilyMembers),
+          ayushmanCardStatus: formData.phase1.ayushmanCardStatus,
+          ayushmanCardCount: parseInt(formData.phase1.ayushmanCardCount) || 0
+        },
+        phase2: formData.phase2,
+        phase3: formData.phase3,
+        phase4: formData.phase4,
         surveyorId: user?.id,
         submittedAt: new Date().toISOString(),
       };
@@ -69,9 +139,25 @@ export default function SurveyForm() {
         navigate('/survey-list');
       }, 2000);
     } catch (err) {
-      setError(
-        err.response?.data?.message || 'Error submitting survey. Please try again.'
-      );
+      // Better error handling for API responses
+      let errorMessage = 'Error submitting survey. Please try again.';
+      
+      if (err.response?.data?.errors) {
+        const apiErrors = err.response.data.errors;
+        if (Array.isArray(apiErrors)) {
+          errorMessage = apiErrors.join('\n');
+        } else if (typeof apiErrors === 'object') {
+          errorMessage = Object.entries(apiErrors)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join('\n');
+        } else if (typeof apiErrors === 'string') {
+          errorMessage = apiErrors;
+        }
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -163,7 +249,10 @@ export default function SurveyForm() {
           {/* Error Message */}
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
+              <p className="font-semibold mb-2">❌ Submission Error:</p>
+              <div className="whitespace-pre-line text-sm">
+                {error}
+              </div>
             </div>
           )}
 

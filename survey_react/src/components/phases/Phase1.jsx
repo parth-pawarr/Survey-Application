@@ -97,24 +97,34 @@ export default function Phase1() {
         <label className="form-label">Do family members have an Ayushman Bharat card? *</label>
         <div className="space-y-2">
           {['All Members Have', 'Some Members Have', 'None Have'].map((option) => (
-            <label key={option} className="flex items-center">
+            <label 
+              key={option} 
+              className={`flex items-center p-3 border rounded cursor-pointer transition-colors ${
+                phase1.ayushmanCardStatus === option 
+                  ? 'border-blue-500 bg-blue-50' 
+                  : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
+              }`}
+            >
               <input
                 type="radio"
                 name="ayushmanCardStatus"
                 value={option}
                 checked={phase1.ayushmanCardStatus === option}
                 onChange={handleChange}
-                className="mr-2 w-4 h-4"
+                className="mr-3 w-4 h-4"
                 required
               />
               <span className="text-gray-700">{option}</span>
             </label>
           ))}
         </div>
+        {!phase1.ayushmanCardStatus && (
+          <p className="text-red-500 text-sm mt-2">This field is required</p>
+        )}
       </div>
 
       {phase1.ayushmanCardStatus === 'Some Members Have' && (
-        <div className="form-group">
+        <div className="form-group bg-blue-50 p-4 rounded border-l-4 border-blue-500">
           <label className="form-label">How many members have the card? *</label>
           <input
             type="number"
@@ -126,6 +136,9 @@ export default function Phase1() {
             min="1"
             required
           />
+          {!phase1.ayushmanCardCount && (
+            <p className="text-red-500 text-sm mt-2">Please specify the count</p>
+          )}
         </div>
       )}
     </div>

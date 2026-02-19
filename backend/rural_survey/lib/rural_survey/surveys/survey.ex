@@ -3,6 +3,7 @@ defmodule RuralSurvey.Surveys.Survey do
   Survey struct representing a household survey with all phases.
   """
 
+  @derive Jason.Encoder
   alias RuralSurvey.Surveys.{Phase1, Phase2, Phase3, Phase4}
   alias RuralSurvey.Mongo
   alias Mongo

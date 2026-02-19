@@ -3,6 +3,7 @@ defmodule RuralSurvey.Surveys.Phase4 do
   Phase 4: Employment Section
   """
 
+  @derive Jason.Encoder
   alias RuralSurvey.Surveys.Phase4.EmployedMember
   alias RuralSurvey.Surveys.Phase4.UnemployedMember
 
@@ -109,8 +110,11 @@ end
 
 defmodule RuralSurvey.Surveys.Phase4.EmployedMember do
   @moduledoc """
-  Employed member in Phase 4
+  Employed member in Phase 4 (Employment)
   """
+
+  @derive Jason.Encoder
+  alias RuralSurvey.Surveys.Phase4
 
   @type t :: %__MODULE__{
           name: String.t(),
@@ -232,8 +236,11 @@ end
 
 defmodule RuralSurvey.Surveys.Phase4.UnemployedMember do
   @moduledoc """
-  Unemployed member in Phase 4
+  Unemployed member in Phase 4 (Employment)
   """
+
+  @derive Jason.Encoder
+  alias RuralSurvey.Surveys.Phase4
 
   @type t :: %__MODULE__{
           name: String.t(),

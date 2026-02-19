@@ -3,6 +3,7 @@ defmodule RuralSurvey.Surveys.Phase3 do
   Phase 3: Education Section
   """
 
+  @derive Jason.Encoder
   alias RuralSurvey.Surveys.Phase3.Child
 
   @type t :: %__MODULE__{
@@ -91,6 +92,8 @@ defmodule RuralSurvey.Surveys.Phase3.Child do
   @moduledoc """
   Child in Phase 3 (Education)
   """
+
+  @derive Jason.Encoder
 
   @type t :: %__MODULE__{
           childName: String.t(),
